@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Homework</title>
+    <style>
+      .product {
+        width: 200px;
+        padding: 10px;
+        float: left;
+        margin-right: 30px;
+        box-shadow: 0 0 4px black;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+Обязательное задание.
+
+Выполнить все задачи в теге script. Комментарии, в которых написаны задачи, не
+стирать, код с решением задачи пишем под комментарием.
+-->
+    <div class="product">
+      <div class="productName">Товар 1</div>
+      <img src="https://picsum.photos/id/367/200/300" alt="" />
+      <button>В корзину</button>
+    </div>
+    <div class="product">
+      <div class="productName">Товар 2</div>
+      <img src="https://picsum.photos/id/425/200/300" alt="" />
+      <button>В корзину</button>
+    </div>
+    <div class="product">
+      <div class="productName">Товар 3</div>
+      <img src="https://picsum.photos/id/429/200/300" alt="" />
+      <button>В корзину</button>
+    </div>
+
+    <script>
+      "use strict";
+
+      /*
+      1. Установите всем элементам с классом "productName" размер шрифта 24px.
+       */
+      document.querySelectorAll(".productName").forEach((item) => {
+        item.style.fontSize = "24px";
+      });
+      /*
+      2. Установите всем элементам с классом "product" внешний отступ справа 50px.
+       */
+      document.querySelectorAll(".product").forEach((item) => {
+        item.style.marginRight = "50px";
+      });
+      /*
+      3. При клике на кнопку "В корзину" название кнопки должно поменяться на
+      "Добавлено" и кнопка должна стать неактивной.
+       */
+      function listenButton(elem) {
+        elem.addEventListener(
+          "click",
+          (event) => {
+            event.target.innerText = "Добавлено";
+            event.target.disabled = true;
+          },
+          { once: true }
+        );
+      }
+
+      /*
+      # querySelector не массив, метода filter у него нет. Сначала преобразуем в массив, должен быть iterable
+      */
+      const btnEl = [...document.querySelectorAll("button")].filter((elem) => {
+        return elem.innerText === "В корзину";
+      });
+
+      /*
+      # forEach передает в функцию первый аргумент элемент массива, который не указывается.
+      */
+      btnEl.forEach(listenButton);
+
+      /*
+      4. Создайте полную (глубокую) копию элемента с классом product, измените в
+      этой копии путь до картинки на:
+      https://picsum.photos/id/1080/200/300
+      Поставьте название товара в данной копии "Товар 4" и замените последний
+      отображенный товар на странице на созданную копию. У данной копии также
+      должен правильно работать код из 3-го задания.
+       */
+
+      const products = document.querySelectorAll(".product");
+      const newProduct = products[0].cloneNode(true);
+      const lastProduct = products[products.length - 1];
+
+      newProduct.childNodes.forEach((elem) => {
+        if (elem.nodeName === "IMG") {
+          elem.src = "https://picsum.photos/id/1080/200/300";
+        }
+        /* Не у всех есть объект classList, поэтому сначала поверяем на DIV */
+        if (elem.nodeName === "DIV" && elem.classList.contains("productName")) {
+          elem.innerText = "Товар 4";
+        }
+      });
+
+      lastProduct.replaceWith(newProduct);
+      listenButton(newProduct);
+
+      /*
+      5. По истечении 2 секунд с момента открытия страницы первый товар должен быть
+      удален из html.
+       */
+      function removeFirstProduct(event) {
+        setTimeout(() => {
+          document.querySelector(".product").remove();
+        }, 2000);
+      }
+      /* Нужен callback, неявно принимает event*/
+      window.addEventListener("load", removeFirstProduct);
+    </script>
+  </body>
+</html>

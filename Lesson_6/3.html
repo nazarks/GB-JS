@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css"
+      integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog=="
+      crossorigin="anonymous"
+    />
+    <style>
+      i {
+        font-size: 50px;
+      }
+      .golden {
+        color: gold;
+      }
+    </style>
+  </head>
+  <body>
+    <!--
+Обязательное задание.
+
+Выполнить все задачи в теге script. Комментарии, в которых написаны задачи, не
+стирать, код с решением задачи пишем под комментарием.
+-->
+
+    <div class="stars_container">
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+      <i class="fas fa-star"></i>
+    </div>
+
+    <script>
+      "use strict";
+
+      /*
+        1. При наведении на любую из звезд, данной звезде должен ставиться класс
+        golden, также такой класс должен ставиться всем звездам до нее слева.
+        */
+      const starEl = document.querySelectorAll(".fas.fa-star");
+
+      function setGolden(elem) {
+        if (elem.nodeName === "I") {
+          elem.classList.add("golden");
+        }
+
+        if (
+          elem.previousSibling != null &&
+          elem.previousSibling.parentElement.nodeName === "DIV" &&
+          elem.previousSibling.parentElement.classList.contains(
+            "stars_container"
+          )
+        ) {
+          setGolden(elem.previousSibling);
+        }
+      }
+
+      function onMouseover(elem) {
+        elem.addEventListener("mouseover", (event) => {
+          setGolden(elem);
+        });
+      }
+
+      starEl.forEach(onMouseover);
+
+      /*
+        2. Когда мы уводим курсор мыши от звезды, все поставленные классы из первого
+        задания должны быть удалены.
+         */
+
+      function onMouseout(elem) {
+        elem.addEventListener("mouseout", (event) => {
+          starEl.forEach((starElem) => {
+            starElem.classList.remove("golden");
+          });
+        });
+      }
+
+      starEl.forEach(onMouseout);
+
+      /*
+        3. Когда мы переводим мышь от одной звезды к другой, у нас могут мигать
+        звезды (временно могут становиться черными). Почему так? Напишите словами.
+        Можем ли мы это исправить? Если да, то предложите решение.
+        */
+
+      /*
+        Звезды мигают согласно тех. задания, когда курсор уходит с звезды, все классы "golden" удаляются.
+        В рамках задания из пункта 2, мы должны удалять классы,что является нежелательным когда курсор переходит от звезды к звезде.
+        Чтобы убрать этот эффект, можно проверять находится ли курсор при переходе от звезды к звезде над полем с элементом DIV,
+        которому пренадлежат звезды. Если курсор не покинул DIV со звездами, то делать звезды черными не надо.
+        Но тогда возникает вопрос, когда же собственно их тогда делать черными? Видимо, когда курсор покидает DIV со звездами полностью.
+        Это все выглядит не очень хорошо для пользователя.
+        Раз у нас уже не работает предложенный алгоритм в части пункта 2, то тогда есть смысл пересмотреть его полностью.
+        Новый алгоритм:
+        1) Если при наведении курсора на звезду она была черной, то эту звезду и все звезды слева делаем золотой.
+        2) Если при наведении курсора на звезду она была золотой, то эту звезду и все звезды справа делаем черной.
+        Поскольку новый алгоритм из пункта 3 конфликтует со старым из пункта 2, я вынес его в отдельный файл 3_3.html   
+        */
+    </script>
+  </body>
+</html>
